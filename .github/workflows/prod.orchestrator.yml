@@ -1,4 +1,6 @@
-on: [push]
+on:
+  release:
+    types: [published]
 
 name: PROD - Deploy Azure Resource
 jobs:
