@@ -1,0 +1,27 @@
+name: 'Deploy Topology RG'
+description: 'Deploys the Resource Group where topology resources will be deployed'
+
+inputs:
+  env:
+    description: “dev qa uat staging prod”
+    required: true
+  az_sub_id:
+    description: “Azure subscription id”
+    required: true
+  az_rg_topology_n:
+    description: “Azure resourceGroup name”
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    # Deploy Bicep file
+  - name: deploy
+    uses: azure/arm-deploy@v1
+    with:
+      scope: subscription
+      region: eastus2
+      subscriptionId: ${{ inputs.az_sub_id }}
+      template: ./rg.bicep
+      parameters: env=${{ inputs.env }} rg_topology_n=${{ inputs.az_rg_topology_n }}
+      failOnStdErr: false

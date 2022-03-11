@@ -1,0 +1,26 @@
+on: [push]
+name: Azure Bicep Topology
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+    - uses: actions/checkout@v2
+
+      # Log into Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Create rg
+    - uses: ./.github/actions/deploy-topology-rg
+      with:
+        env: "prod"
+        az_sub_id: ${{ secrets.AZURE_SUBSCRIPTION }}
+        az_rg_topology_n: "rg-hub-prod-eastus2"
+
+      # Deploy topology
+    - uses: ./.github/actions/deploy-topology
+      with:
+        env: "prod"
+        az_rg_topology_n: "rg-hub-prod-eastus2"
