@@ -1,8 +1,6 @@
-on:
-  release:
-    types: [published]
+on: [push]
 
-name: Deploy Azure Resource
+name: PROD - Deploy Azure Resource
 jobs:
   deploy_to_prod:
     runs-on: ubuntu-latest
