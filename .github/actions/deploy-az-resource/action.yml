@@ -21,7 +21,7 @@ runs:
       scope: resourcegroup
       subscriptionId: ${{ inputs.az_sub_id }}
       resourceGroupName: ${{ inputs.az_rg_n }}
-      deploymentMode: Complete
+      deploymentMode: Incremental
       template: ./main.bicep
       parameters: env=${{ inputs.env }}
       failOnStdErr: false
