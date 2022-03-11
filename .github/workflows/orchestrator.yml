@@ -1,8 +1,9 @@
 on: [push]
 name: Deploy Azure Resource
 jobs:
-  build-and-deploy:
+  deploy_to_dev:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       # Checkout code
     - uses: actions/checkout@v2
