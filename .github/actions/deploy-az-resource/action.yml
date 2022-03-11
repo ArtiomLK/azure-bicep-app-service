@@ -19,7 +19,6 @@ runs:
     uses: azure/arm-deploy@v1
     with:
       scope: resourcegroup
-      subscriptionId: ${{ inputs.az_sub_id }}
       resourceGroupName: ${{ inputs.az_rg_n }}
       deploymentMode: Incremental
       template: ./main.bicep
