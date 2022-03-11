@@ -1,1 +1,1 @@
-# azure-bicep-app-service
+# Azure App Service
