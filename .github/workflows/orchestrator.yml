@@ -13,7 +13,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Create rg
-    - uses: ./.github/actions/deploy-topology-rg
+    - uses: ./.github/actions/deploy-rg
       with:
         env: "prod"
         az_sub_id: ${{ secrets.AZURE_SUBSCRIPTION }}
