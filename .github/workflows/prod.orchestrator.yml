@@ -1,23 +1,9 @@
-on: [push]
+on:
+  release:
+    types: [published]
+
 name: Deploy Azure Resource
 jobs:
-  deploy_to_dev:
-    runs-on: ubuntu-latest
-    environment: dev
-    steps:
-      # Checkout code
-    - uses: actions/checkout@v2
-
-      # Log into Azure
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      # Deploy Azure Resource
-    - uses: ./.github/actions/deploy-az-resource
-      with:
-        az_rg_n: ${{ secrets.RG_N }}
-
   deploy_to_prod:
     runs-on: ubuntu-latest
     environment: prod
