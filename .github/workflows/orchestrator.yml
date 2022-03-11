@@ -33,4 +33,4 @@ jobs:
       # Deploy Azure Resource
     - uses: ./.github/actions/deploy-az-resource
       with:
-        az_rg_n: "rg-bicephub-dev-eastus2"
+        az_rg_n: "rg-bicephub-prod-eastus2"
