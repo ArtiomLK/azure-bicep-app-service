@@ -12,15 +12,8 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Create rg
-    - uses: ./.github/actions/deploy-rg
+      # Deploy Azure Resource
+    - uses: ./.github/actions/deploy-az-resource
       with:
-        env: "prod"
-        az_sub_id: ${{ secrets.AZURE_SUBSCRIPTION }}
-        az_rg_topology_n: "rg-hub-prod-eastus2"
-
-      # Deploy topology
-    - uses: ./.github/actions/deploy-topology
-      with:
-        env: "prod"
-        az_rg_topology_n: "rg-hub-prod-eastus2"
+        env: "dev"
+        az_rg_topology_n: "rg-bicephub-dev-eastus2"
