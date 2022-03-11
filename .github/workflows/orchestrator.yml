@@ -16,4 +16,5 @@ jobs:
     - uses: ./.github/actions/deploy-az-resource
       with:
         env: "dev"
-        az_rg_topology_n: "rg-bicephub-dev-eastus2"
+        az_rg_n: "rg-bicephub-dev-eastus2"
+        az_sub_id: secrets.AZURE_SUBSCRIPTION_ID
