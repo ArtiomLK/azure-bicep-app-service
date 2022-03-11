@@ -1,5 +1,3 @@
-targetScope = 'resourceGroup'
-
 param tags object = {}
 param location string = resourceGroup().location
 
