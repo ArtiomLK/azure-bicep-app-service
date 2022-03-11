@@ -22,5 +22,4 @@ runs:
       resourceGroupName: ${{ inputs.az_rg_n }}
       deploymentMode: Incremental
       template: ./main.bicep
-      parameters: env=${{ inputs.env }}
       failOnStdErr: false
