@@ -1,12 +1,6 @@
 name: 'Deploy Azure Resource'
 
 inputs:
-  env:
-    description: “dev, qa, uat, staging, prod or any env created”
-    required: true
-  az_sub_id:
-    description: “Azure Subscription ID”
-    required: true
   az_rg_n:
     description: “Azure ResourceGroup name”
     required: true

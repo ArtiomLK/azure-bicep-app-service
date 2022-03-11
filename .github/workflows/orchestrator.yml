@@ -16,6 +16,21 @@ jobs:
       # Deploy Azure Resource
     - uses: ./.github/actions/deploy-az-resource
       with:
-        env: "dev"
         az_rg_n: "rg-bicephub-dev-eastus2"
-        az_sub_id: secrets.AZURE_SUBSCRIPTION_ID
+
+  deploy_to_prod:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      # Checkout code
+    - uses: actions/checkout@v2
+
+      # Log into Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Deploy Azure Resource
+    - uses: ./.github/actions/deploy-az-resource
+      with:
+        az_rg_n: "rg-bicephub-dev-eastus2"
