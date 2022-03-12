@@ -13,11 +13,12 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
+
       # Deploy Resource to ACR
     - uses: azure/docker-login@v1
       with:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
+        az bicep build --file main.bicep
         az bicep publish --file main.bicep --target br:${{ secrets.REGISTRY_LOGIN_SERVER }}/bicep/modules/app:${{ github.sha }}
