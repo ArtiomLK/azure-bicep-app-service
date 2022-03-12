@@ -8,7 +8,12 @@ jobs:
     steps:
       # Checkout code
     - uses: actions/checkout@v2
-    
+
+      # Log into Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       # Deploy Resource to ACR
     - uses: azure/docker-login@v1
       with:
