@@ -20,5 +20,4 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        az bicep build --file main.bicep
         az bicep publish --file ./main.bicep --target br:${{ secrets.REGISTRY_LOGIN_SERVER }}/bicep/modules/app:${{ github.sha }}
