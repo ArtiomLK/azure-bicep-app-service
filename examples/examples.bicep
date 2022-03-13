@@ -44,6 +44,16 @@ module DeployOneApp '../main.bicep' = {
     app_min_tls_v: '1.2'
   }
 }
+module DeployOneAppHttps '../main.bicep' = {
+  name: 'deployOneAppHttps'
+  params: {
+    location: 'eastus2'
+    app_enable_https_only: true
+    app_names: 'appHttpsA${guid(subscription().id, resourceGroup().id, tags.env)}'
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+  }
+}
 
 module DeployMultipleApps '../main.bicep' = {
   name: 'deployMultipleApp'
@@ -56,3 +66,13 @@ module DeployMultipleApps '../main.bicep' = {
   }
 }
 
+module DeployMultipleAppsHttps '../main.bicep' = {
+  name: 'deployMultipleAppHttps'
+  params: {
+    location: 'eastus2'
+    app_enable_https_only: true
+    app_names: 'appMultiHttpsA-${guid(subscription().id, resourceGroup().id, tags.env)},appMultiHttpB${guid(subscription().id, resourceGroup().id, tags.env)}'
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+  }
+}
