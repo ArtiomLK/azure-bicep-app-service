@@ -13,6 +13,11 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      # Deploy Azure Resource
+    - uses: ./.github/actions/deploy-az-resource
+      with:
+        az_rg_n: ${{ secrets.RG_N }}
 
       # Deploy Resource to ACR
     - uses: azure/docker-login@v1

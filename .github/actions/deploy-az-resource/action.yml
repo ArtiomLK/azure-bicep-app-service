@@ -8,12 +8,11 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    # Deploy Bicep file
-  - name: deploy
+  - name: test-bicep-file-deployment
     uses: azure/arm-deploy@v1
     with:
       scope: resourcegroup
       resourceGroupName: ${{ inputs.az_rg_n }}
-      deploymentMode: Incremental
-      template: ./main.bicep
-      failOnStdErr: false
+      deploymentMode: Complete
+      template: examples/examples.bicep
+      failOnStdErr: true
