@@ -41,7 +41,7 @@ module DeployOneApp '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: false
-    app_names: 'appA${guid(subscription().id, resourceGroup().id, tags.env)}'
+    app_names: 'appA-${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
   }
@@ -51,7 +51,7 @@ module DeployOneAppHttps '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: true
-    app_names: 'appHttpsA${guid(subscription().id, resourceGroup().id, tags.env)}'
+    app_names: 'appHttpsA-${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.1'
   }
@@ -62,7 +62,7 @@ module DeployMultipleApps '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: false
-    app_names: 'appMultiA${guid(subscription().id, resourceGroup().id, tags.env)},appMultiB${guid(subscription().id, resourceGroup().id, tags.env)}'
+    app_names: 'appMultiA-${guid(subscription().id, resourceGroup().id, tags.env)},appMultiB${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
   }
