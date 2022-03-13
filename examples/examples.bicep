@@ -1,5 +1,8 @@
 targetScope = 'resourceGroup'
-
+// ------------------------------------------------------------------------------------------------
+// Deployment parameters
+// ------------------------------------------------------------------------------------------------
+param location string = 'eastus2'
 // Sample tags parameters
 var tags = {
   project: 'test'
@@ -7,7 +10,6 @@ var tags = {
 }
 
 // Sample App Service Plan parameters
-param location string = resourceGroup().location
 param plan_n string = 'plan-azure-bicep-app-service-test'
 param plan_sku_code string = 'P1V3'
 param plan_sku_tier string = 'PremiumV3'
@@ -37,7 +39,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 module DeployOneApp '../main.bicep' = {
   name: 'deployOneApp'
   params: {
-    location: 'eastus2'
+    location: location
     app_enable_https_only: false
     app_names: 'appA${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
@@ -47,7 +49,7 @@ module DeployOneApp '../main.bicep' = {
 module DeployOneAppHttps '../main.bicep' = {
   name: 'deployOneAppHttps'
   params: {
-    location: 'eastus2'
+    location: location
     app_enable_https_only: true
     app_names: 'appHttpsA${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
@@ -58,7 +60,7 @@ module DeployOneAppHttps '../main.bicep' = {
 module DeployMultipleApps '../main.bicep' = {
   name: 'deployMultipleApp'
   params: {
-    location: 'eastus2'
+    location: location
     app_enable_https_only: false
     app_names: 'appMultiA${guid(subscription().id, resourceGroup().id, tags.env)},appMultiB${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
@@ -69,7 +71,7 @@ module DeployMultipleApps '../main.bicep' = {
 module DeployMultipleAppsHttps '../main.bicep' = {
   name: 'deployMultipleAppHttps'
   params: {
-    location: 'eastus2'
+    location: location
     app_enable_https_only: true
     app_names: 'appMultiHttpsA-${guid(subscription().id, resourceGroup().id, tags.env)},appMultiHttpB${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
