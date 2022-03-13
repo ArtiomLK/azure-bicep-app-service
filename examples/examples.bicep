@@ -41,7 +41,7 @@ module DeployOneApp '../main.bicep' = {
     app_enable_https_only: false
     app_names: 'appA${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
-    app_min_tls_v: '1.2'
+    app_min_tls_v: '1.0'
   }
 }
 module DeployOneAppHttps '../main.bicep' = {
@@ -51,7 +51,7 @@ module DeployOneAppHttps '../main.bicep' = {
     app_enable_https_only: true
     app_names: 'appHttpsA${guid(subscription().id, resourceGroup().id, tags.env)}'
     plan_id: appServicePlan.id
-    app_min_tls_v: '1.2'
+    app_min_tls_v: '1.1'
   }
 }
 
