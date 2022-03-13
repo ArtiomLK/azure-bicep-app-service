@@ -4,7 +4,7 @@
 @description('Az Resources tags')
 param tags object = {}
 @description('Az Resources deployment location')
-param location string
+param location string = resourceGroup().location
 
 // ------------------------------------------------------------------------------------------------
 // Application parameters
@@ -23,6 +23,11 @@ param app_enable_https_only bool
 // Application Topology parameters
 // ------------------------------------------------------------------------------------------------
 @description('Enable only HTTPS traffic through App Service')
+@allowed([
+  '1.0'
+  '1.1'
+  '1.2'
+])
 param app_min_tls_v string
 
 @description('Enable app Virtual Network Integration by providing a subnet ID')
