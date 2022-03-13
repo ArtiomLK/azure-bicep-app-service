@@ -13,8 +13,8 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-      # Deploy Azure Resource
+
+      # Test Azure Resource Deployment
     - uses: ./.github/actions/deploy-az-resource
       with:
         az_rg_n: ${{ secrets.RG_N }}
