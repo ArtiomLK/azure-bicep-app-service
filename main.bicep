@@ -14,32 +14,22 @@ param app_names string
 var app_names_parsed = split(app_names, ',')
 
 @description('App Service Plan resource ID')
-param plan_ids string
-var plan_id_parsed = split(plan_ids, ',')
+param plan_id string
 
 @description('Enable only HTTPS traffic through App Service')
-param app_enable_https_only string
-var app_enable_https_only_parsed = split(app_enable_https_only, ',')
+param app_enable_https_only bool
 
 // ------------------------------------------------------------------------------------------------
 // Application Topology parameters
 // ------------------------------------------------------------------------------------------------
 @description('Enable only HTTPS traffic through App Service')
 param app_min_tls_v string
-var app_min_tls_v_parsed = split(app_min_tls_v, ',')
 
 @description('Enable app Virtual Network Integration by providing a subnet ID')
 param snet_plan_vnet_integration_id string = ''
-var snet_plan_vnet_integration_id_parsed = split(snet_plan_vnet_integration_id, ',')
-
-@description('Enbable App Private Endpoints Connections')
-param app_enable_pendpoints string
-var app_enable_pendpoints_parsed = split(app_enable_pendpoints, ',')
-var app_enable_pe = contains(app_enable_pendpoints_parsed, 'true')
 
 @description('subnets IDs to Enbable App Private Endpoints Connections')
 param snet_app_vnet_pe_id string = ''
-var snet_app_vnet_pe_id_parsed = split(snet_app_vnet_pe_id, ',')
 
 // pdnszgroup - Add A records to PDNSZ for app pe
 @description('App Service Private DNS Zone Resource ID where the A records will be written')
@@ -54,27 +44,29 @@ var pdnsz_app_parsed_id = empty(pdnsz_app_id) ? {
   res_n: substring(pdnsz_app_id, lastIndexOf(pdnsz_app_id, '/')+1)
 }
 
-var app_properties = [for i in range(0, length(app_names_parsed)): {
-  serverFarmId: length(plan_id_parsed) == 1 ? plan_id_parsed[0] : app_names_parsed[i]
-  httpsOnly: length(app_enable_https_only_parsed) == 1 ? app_enable_https_only_parsed[0] : app_enable_https_only_parsed[i]
+var app_properties = {
+  serverFarmId: plan_id
+  httpsOnly: app_enable_https_only
   siteConfig: {
-    minTlsVersion: length(app_min_tls_v_parsed) == 1 ? app_min_tls_v_parsed[0] : app_min_tls_v_parsed[i]
+    minTlsVersion: app_min_tls_v
   }
-}]
+ }
+
+var app_properties_w_vnet_integration = union(app_properties, {
+  virtualNetworkSubnetId: snet_plan_vnet_integration_id
+})
 
 // ------------------------------------------------------------------------------------------------
-// Deploy Application
+// Deploy Azure Resources
 // ------------------------------------------------------------------------------------------------
 resource appService 'Microsoft.Web/sites@2021-03-01' = [for i in range(0, length(app_names_parsed)): {
   name: app_names_parsed[i]
   location: location
-  properties: empty(snet_plan_vnet_integration_id) ? app_properties[0] : union(app_properties[0], {
-    virtualNetworkSubnetId: snet_plan_vnet_integration_id
-  })
+  properties: empty(snet_plan_vnet_integration_id) ? app_properties : app_properties_w_vnet_integration
   tags: tags
 }]
 
-resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = [for i in range(0, length(app_names_parsed)): if (bool(app_enable_pendpoints_parsed[i])) {
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = [for i in range(0, length(app_names_parsed)): if (!empty(snet_app_vnet_pe_id)) {
   tags: tags
   name: 'pe-${app_names_parsed[i]}'
   location: location
@@ -91,7 +83,7 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = [for 
       }
     ]
     subnet: {
-      id: length(snet_app_vnet_pe_id_parsed) == 1 ? snet_app_vnet_pe_id_parsed[0] : snet_app_vnet_pe_id_parsed[i]
+      id: snet_app_vnet_pe_id
     }
   }
   dependsOn: [
@@ -100,7 +92,7 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = [for 
 }]
 
 // App Private DNS Zone Group - A Record
-resource zoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-08-01' = [for i in range(0, length(app_names_parsed)): if (bool(app_enable_pendpoints_parsed[i])) {
+resource zoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-08-01' = [for i in range(0, length(app_names_parsed)): if (!empty(snet_app_vnet_pe_id)) {
   name: '${privateEndpoint[i].name}/default'
   properties: {
     privateDnsZoneConfigs: [
@@ -117,7 +109,7 @@ resource zoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020
   ]
 }]
 
-module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkprivatednszonesvirtualnetworklinks:b066cd77ae1236f4b0e18c6a2c530aa5518de854' = if (app_enable_pe) {
+module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkprivatednszonesvirtualnetworklinks:b066cd77ae1236f4b0e18c6a2c530aa5518de854' = if (!empty(snet_app_vnet_pe_id)) {
   name: 'pdnsVnetLinkDeployment'
   scope: resourceGroup(pdnsz_app_parsed_id.rg_n)
   params: {
