@@ -13,5 +13,5 @@ az group create \
 az deployment group create \
 --resource-group 'rg-azure-bicep-app-service' \
 --mode Complete \
---template-file main.bicep
+--template-file examples/examples.bicep
 ```
