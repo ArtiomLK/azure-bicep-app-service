@@ -1,10 +1,15 @@
 on: [release]
 
+env:
+  ACR_MODULE_N: app
+  RG_N: rg-azure-bicep-app-service
+
 name: PROD - Deploy Azure Resource
 jobs:
   deploy_to_prod:
     runs-on: ubuntu-latest
     environment: prod
+    steps:
     steps:
       # Checkout code
     - uses: actions/checkout@v2
@@ -14,6 +19,11 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # Test Azure Resource Deployment
+    - uses: ./.github/actions/deploy-az-resource
+      with:
+        az_rg_n: ${{ env.RG_N }}
+
       # Deploy Resource to ACR
     - uses: azure/docker-login@v1
       with:
@@ -21,4 +31,4 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
         az bicep build --file main.bicep
-        az bicep publish --file main.bicep --target br:${{ secrets.REGISTRY_LOGIN_SERVER }}/bicep/modules/app:${{ github.sha }}
+        az bicep publish --file main.bicep --target br:${{ secrets.REGISTRY_LOGIN_SERVER }}/bicep/modules/$ACR_MODULE_N:${{ github.sha }}
