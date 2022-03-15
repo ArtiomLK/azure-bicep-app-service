@@ -78,3 +78,49 @@ module DeployMultipleAppsHttps '../main.bicep' = {
     app_min_tls_v: '1.2'
   }
 }
+
+// ------------------------------------------------------------------------------------------------
+// App Service Networking Configurations Examples
+// ------------------------------------------------------------------------------------------------
+var subnets = [
+  {
+    name: 'snet-vnet-integration-azure-bicep-app-service'
+    subnetPrefix: '192.160.0.0/24'
+    privateEndpointNetworkPolicies: 'Disabled'
+    delegations: [
+      {
+        name: 'delegation'
+        properties: {
+          serviceName: 'Microsoft.Web/serverfarms'
+        }
+      }
+    ]
+  }
+  {
+    name: 'snet-app-pe-azure-bicep-app-service'
+    subnetPrefix: '192.160.1.0/24'
+    privateEndpointNetworkPolicies: 'Disabled'
+    delegations: []
+  }
+]
+
+// resource vnetApp 'Microsoft.Network/virtualNetworks@2021-02-01' = {
+//   name: 'vnet-azure-bicep-app-service'
+//   location: location
+//   tags: tags
+//   properties: {
+//     addressSpace: {
+//       addressPrefixes: [
+//         '192.160.0.0/23'
+//       ]
+//     }
+//     subnets: [for subnet in subnets: {
+//       name: subnet.name
+//       properties: {
+//         addressPrefix: subnet.subnetPrefix
+//         delegations: subnet.delegations
+//         privateEndpointNetworkPolicies: subnet.privateEndpointNetworkPolicies
+//       }
+//     }]
+//   }
+// }
