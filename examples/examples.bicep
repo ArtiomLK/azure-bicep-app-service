@@ -144,8 +144,8 @@ module DeployMultipleAppsVnetIntegration '../main.bicep' = {
     location: location
     app_enable_https_only: false
     app_names: 'DeployMultipleAppsVnetIntegration-A-${guid(subscription().id, resourceGroup().id, tags.env)},DeployMultipleAppsVnetIntegration-B-${guid(subscription().id, resourceGroup().id, tags.env)}'
-    plan_id: appServicePlan.id
+    plan_id: vnetApp.properties.subnets[0].id
     app_min_tls_v: '1.0'
-    snet_plan_vnet_integration_id: subnets[0]
+    snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
   }
 }
