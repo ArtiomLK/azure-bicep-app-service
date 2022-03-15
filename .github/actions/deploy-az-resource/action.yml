@@ -15,4 +15,4 @@ runs:
       resourceGroupName: ${{ inputs.az_rg_n }}
       deploymentMode: Complete
       template: examples/examples.bicep
-      failOnStdErr: true
+      failOnStdErr: false
