@@ -104,23 +104,23 @@ var subnets = [
   }
 ]
 
-// resource vnetApp 'Microsoft.Network/virtualNetworks@2021-02-01' = {
-//   name: 'vnet-azure-bicep-app-service'
-//   location: location
-//   tags: tags
-//   properties: {
-//     addressSpace: {
-//       addressPrefixes: [
-//         '192.160.0.0/23'
-//       ]
-//     }
-//     subnets: [for subnet in subnets: {
-//       name: subnet.name
-//       properties: {
-//         addressPrefix: subnet.subnetPrefix
-//         delegations: subnet.delegations
-//         privateEndpointNetworkPolicies: subnet.privateEndpointNetworkPolicies
-//       }
-//     }]
-//   }
-// }
+resource vnetApp 'Microsoft.Network/virtualNetworks@2021-02-01' = {
+  name: 'vnet-azure-bicep-app-service'
+  location: location
+  tags: tags
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        '192.160.0.0/23'
+      ]
+    }
+    subnets: [for subnet in subnets: {
+      name: subnet.name
+      properties: {
+        addressPrefix: subnet.subnetPrefix
+        delegations: subnet.delegations
+        privateEndpointNetworkPolicies: subnet.privateEndpointNetworkPolicies
+      }
+    }]
+  }
+}
