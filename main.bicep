@@ -78,7 +78,7 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = [for 
   properties: {
     privateLinkServiceConnections: [
       {
-        name: 'pe-${app_names_parsed[i]}-${take(guid(subscription().id, app_names_parsed[i], tags.env), 4)}'
+        name: 'pe-${app_names_parsed[i]}-${take(guid(subscription().id, app_names_parsed[i], resourceGroup().name), 4)}'
         properties: {
           privateLinkServiceId: '${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/sites/${appService[i].name}'
           groupIds: [
