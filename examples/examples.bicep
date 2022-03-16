@@ -36,45 +36,45 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 // 'br:bicephubdev.azurecr.io/bicep/modules/app:v1'
 // ------------------------------------------------------------------------------------------------
 
-module OneAppHttp '../main.bicep' = {
-  name: 'OneAppHttp'
+module Http '../main.bicep' = {
+  name: 'Http'
   params: {
     location: location
     app_enable_https_only: false
-    app_names: take('OneAppHttp-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_names: take('Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
   }
 }
 
-module OneAppHttps '../main.bicep' = {
-  name: 'OneAppHttps'
+module HttpS '../main.bicep' = {
+  name: 'HttpS'
   params: {
     location: location
     app_enable_https_only: true
-    app_names: take('OneAppHttps-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_names: take('HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.1'
   }
 }
 
-module MultiApp '../main.bicep' = {
-  name: 'MultiApp'
+module ABHttp '../main.bicep' = {
+  name: 'ABHttp'
   params: {
     location: location
     app_enable_https_only: false
-    app_names: '${take('MultiAppA-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('MultiAppB${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_names: '${take('A-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
   }
 }
 
-module MultiAppHttps '../main.bicep' = {
-  name: 'MultiAppHttps'
+module ABHttps '../main.bicep' = {
+  name: 'ABHttps'
   params: {
     location: location
     app_enable_https_only: true
-    app_names: '${take('MultiAppAHttps-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('MultiAppBHttps${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_names: '${take('A-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-HttpS${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
   }
@@ -126,24 +126,24 @@ resource vnetApp 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   }
 }
 
-module OneAppHttpVnetIntegration '../main.bicep' = {
-  name: 'OneAppHttpVnetIntegration'
+module VnetIntegration '../main.bicep' = {
+  name: 'VnetIntegration'
   params: {
     location: location
     app_enable_https_only: false
-    app_names: take('OneAppHttpVnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_names: take('VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
   }
 }
 
-module MultiAppHttpVnetIntegration '../main.bicep' = {
-  name: 'MultiAppHttpVnetIntegration'
+module ABVnetIntegration '../main.bicep' = {
+  name: 'ABCVnetIntegration'
   params: {
     location: location
     app_enable_https_only: false
-    app_names: '${take('MultiAppAVnetIntegration${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('MultiAppBVnetIntegration${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_names: '${take('A-VnetIntegration${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetIntegration${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
