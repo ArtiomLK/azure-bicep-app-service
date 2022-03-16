@@ -13,6 +13,6 @@ runs:
     with:
       scope: resourcegroup
       resourceGroupName: ${{ inputs.az_rg_n }}
-      deploymentMode: Complete
+      deploymentMode: Incremental
       template: examples/examples.bicep
       failOnStdErr: false

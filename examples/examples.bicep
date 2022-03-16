@@ -35,7 +35,6 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 // '../main.bicep' by the ref with your version, for example:
 // 'br:bicephubdev.azurecr.io/bicep/modules/app:v1'
 // ------------------------------------------------------------------------------------------------
-
 module Http '../main.bicep' = {
   name: 'Http'
   params: {
@@ -126,6 +125,15 @@ resource vnetApp 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   }
 }
 
+resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.azurewebsites.net'
+  location: 'global'
+  tags: tags
+}
+
+// ------------------------------------------------------------------------------------------------
+// App Service Vnet Integration
+// ------------------------------------------------------------------------------------------------
 module VnetIntegration '../main.bicep' = {
   name: 'VnetIntegration'
   params: {
@@ -147,5 +155,55 @@ module ABVnetIntegration '../main.bicep' = {
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
+  }
+}
+
+// ------------------------------------------------------------------------------------------------
+// App Service PE
+// ------------------------------------------------------------------------------------------------
+module VnetPE '../main.bicep' = {
+  name: 'VnetPE'
+  params: {
+    location: location
+    app_enable_https_only: false
+    app_names: take('VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
+    pdnsz_app_id: pdnsz.id
+    app_pe_create_virtual_network_link: true
+  }
+}
+
+module ABVnetPE '../main.bicep' = {
+  name: 'ABVnetPE'
+  params: {
+    location: location
+    app_enable_https_only: false
+    app_names: '${take('A-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.0'
+    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
+    pdnsz_app_id: pdnsz.id
+    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
+  }
+}
+
+// ------------------------------------------------------------------------------------------------
+// App Service Vnet Integration & PE
+// ------------------------------------------------------------------------------------------------
+
+module VnetIntegrationVnetPE '../main.bicep' = {
+  name: 'VnetIntegrationVnetPE'
+  params: {
+    location: location
+    app_enable_https_only: false
+    app_names: take('VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+    snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
+    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
+    pdnsz_app_id: pdnsz.id
+    app_pe_create_virtual_network_link: true
   }
 }
