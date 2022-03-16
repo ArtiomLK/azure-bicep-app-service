@@ -35,7 +35,6 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 // '../main.bicep' by the ref with your version, for example:
 // 'br:bicephubdev.azurecr.io/bicep/modules/app:v1'
 // ------------------------------------------------------------------------------------------------
-
 module Http '../main.bicep' = {
   name: 'Http'
   params: {
@@ -135,7 +134,6 @@ resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 // ------------------------------------------------------------------------------------------------
 // App Service Vnet Integration
 // ------------------------------------------------------------------------------------------------
-
 module VnetIntegration '../main.bicep' = {
   name: 'VnetIntegration'
   params: {
@@ -163,7 +161,6 @@ module ABVnetIntegration '../main.bicep' = {
 // ------------------------------------------------------------------------------------------------
 // App Service PE
 // ------------------------------------------------------------------------------------------------
-
 module VnetPE '../main.bicep' = {
   name: 'VnetPE'
   params: {
