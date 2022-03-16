@@ -126,24 +126,24 @@ resource vnetApp 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   }
 }
 
-module DeployOneAppVnetIntegration '../main.bicep' = {
-  name: 'DeployOneAppVnetIntegration'
+module OneAppHttpVnetIntegration '../main.bicep' = {
+  name: 'OneAppHttpVnetIntegration'
   params: {
     location: location
     app_enable_https_only: false
-    app_names: 'appAVnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}'
+    app_names: take('OneAppHttpVnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
   }
 }
 
-module DeployMultipleAppsVnetIntegration '../main.bicep' = {
-  name: 'DeployMultipleAppsVnetIntegration'
+module MultiAppHttpVnetIntegration '../main.bicep' = {
+  name: 'MultiAppHttpVnetIntegration'
   params: {
     location: location
     app_enable_https_only: false
-    app_names: 'appAVnetIntegrationA${guid(subscription().id, resourceGroup().id, tags.env)},appAVnetIntegrationB${guid(subscription().id, resourceGroup().id, tags.env)}'
+    app_names: '${take('MultiAppAVnetIntegration${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('MultiAppBVnetIntegration${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
