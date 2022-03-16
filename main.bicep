@@ -118,7 +118,7 @@ module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkp
   name: 'pdnsVnetLinkDeployment'
   scope: resourceGroup(pdnsz_app_parsed_id.rg_n)
   params: {
-    snet_app_pe_id: snet_app_vnet_pe_id
+    snet_app_pe_id: split(snet_app_vnet_pe_id, '/subnets/')[0]
     enable_pdnsz_autoregistration: false
     pdnsz_app_id: pdnsz_app_id
     tags: tags
