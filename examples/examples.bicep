@@ -149,3 +149,27 @@ module ABVnetIntegration '../main.bicep' = {
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
   }
 }
+
+module VnetPE '../main.bicep' = {
+  name: 'VnetPE'
+  params: {
+    location: location
+    app_enable_https_only: false
+    app_names: take('VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
+  }
+}
+
+module ABVnetPE '../main.bicep' = {
+  name: 'ABVnetPE'
+  params: {
+    location: location
+    app_enable_https_only: false
+    app_names: '${take('A-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.0'
+    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
+  }
+}
