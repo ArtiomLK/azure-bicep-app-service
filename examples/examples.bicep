@@ -134,7 +134,7 @@ resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 }
 
 resource vnLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
-  name: '${dns_n}/${dns_n}-link'
+  name: '${dns_n}/${dns_n}-dnsz-link'
   location: 'global'
   properties: {
     registrationEnabled: false
