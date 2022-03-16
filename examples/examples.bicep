@@ -188,6 +188,6 @@ module ABVnetPE '../main.bicep' = {
     app_min_tls_v: '1.0'
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
     pdnsz_app_id: pdnsz.id
-    app_pe_create_virtual_network_link: false // this pdnsz to vnet Link already exists thus not redeploying
+    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
   }
 }
