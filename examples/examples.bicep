@@ -126,7 +126,32 @@ resource vnetApp 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   }
 }
 
-// VNET INTEGRATION
+var dns_n = 'privatelink.azurewebsites.net'
+resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.azurewebsites.net'
+  location: 'global'
+  tags: tags
+}
+
+resource vnLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: '${dns_n}/${dns_n}-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnetApp.id
+    }
+  }
+  dependsOn: [
+    pdnsz
+  ]
+  tags: tags
+}
+
+// ------------------------------------------------------------------------------------------------
+// App Service Vnet Integration
+// ------------------------------------------------------------------------------------------------
+
 module VnetIntegration '../main.bicep' = {
   name: 'VnetIntegration'
   params: {
@@ -151,30 +176,10 @@ module ABVnetIntegration '../main.bicep' = {
   }
 }
 
-// Init Vars
-var dns_n = 'privatelink.azurewebsites.net'
-resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: 'privatelink.azurewebsites.net'
-  location: 'global'
-  tags: tags
-}
+// ------------------------------------------------------------------------------------------------
+// App Service PE
+// ------------------------------------------------------------------------------------------------
 
-resource vnLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
-  name: '${dns_n}/${dns_n}-link'
-  location: 'global'
-  properties: {
-    registrationEnabled: false
-    virtualNetwork: {
-      id: vnetApp.id
-    }
-  }
-  dependsOn: [
-    pdnsz
-  ]
-  tags: tags
-}
-
-// Private Endpoint
 module VnetPE '../main.bicep' = {
   name: 'VnetPE'
   params: {
