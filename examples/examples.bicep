@@ -63,7 +63,7 @@ module ABHttp '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: false
-    app_names: '${take('A-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_names: '${take('A-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
   }
@@ -74,7 +74,7 @@ module ABHttps '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: true
-    app_names: '${take('A-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-HttpS${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_names: '${take('A-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
   }
@@ -143,7 +143,7 @@ module ABVnetIntegration '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: false
-    app_names: '${take('A-VnetIntegration${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetIntegration${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_names: '${take('A-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
