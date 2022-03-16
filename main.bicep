@@ -36,6 +36,9 @@ param snet_plan_vnet_integration_id string = ''
 @description('subnet ID to Enbable App Private Endpoints Connections')
 param snet_app_vnet_pe_id string = ''
 
+@description('Create a Private DNS Zone link to the Private Endpoint Vnet. If the link exists the deployment fails')
+param app_pe_create_virtual_network_link bool = false
+
 // pdnszgroup - Add A records to PDNSZ for app pe
 @description('App Service Private DNS Zone Resource ID where the A records will be written')
 param pdnsz_app_id string = ''
@@ -114,7 +117,7 @@ resource zoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020
   ]
 }]
 
-module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkprivatednszonesvirtualnetworklinks:b066cd77ae1236f4b0e18c6a2c530aa5518de854' = if (!empty(snet_app_vnet_pe_id)) {
+module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkprivatednszonesvirtualnetworklinks:b066cd77ae1236f4b0e18c6a2c530aa5518de854' = if (!empty(snet_app_vnet_pe_id) && app_pe_create_virtual_network_link) {
   name: 'pdnsVnetLinkDeployment'
   scope: resourceGroup(pdnsz_app_parsed_id.rg_n)
   params: {
