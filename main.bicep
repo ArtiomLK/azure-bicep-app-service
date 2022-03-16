@@ -33,7 +33,7 @@ param app_min_tls_v string
 @description('Enable app Virtual Network Integration by providing a subnet ID')
 param snet_plan_vnet_integration_id string = ''
 
-@description('subnets IDs to Enbable App Private Endpoints Connections')
+@description('subnet ID to Enbable App Private Endpoints Connections')
 param snet_app_vnet_pe_id string = ''
 
 // pdnszgroup - Add A records to PDNSZ for app pe

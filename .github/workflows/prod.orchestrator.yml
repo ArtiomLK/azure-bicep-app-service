@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
     steps:
-    steps:
       # Checkout code
     - uses: actions/checkout@v2
 
