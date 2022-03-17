@@ -203,6 +203,6 @@ module VnetIntegrationVnetPE '../main.bicep' = {
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
     pdnsz_app_id: pdnsz.id
-    app_pe_create_virtual_network_link: true
+    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
   }
 }
