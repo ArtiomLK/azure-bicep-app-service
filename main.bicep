@@ -3,7 +3,7 @@
 // ------------------------------------------------------------------------------------------------
 @description('Az Resources tags')
 param tags object = {}
-@description('Az Resources deployment location')
+@description('Az Resource deployment location')
 param location string = resourceGroup().location
 
 // ------------------------------------------------------------------------------------------------
@@ -17,23 +17,23 @@ var app_names_parsed = split(app_names, ',')
 param plan_id string
 
 @description('Enable only HTTPS traffic through App Service')
-param app_enable_https_only bool
+param app_enable_https_only bool = false
 
 // ------------------------------------------------------------------------------------------------
 // Application Topology parameters
 // ------------------------------------------------------------------------------------------------
-@description('Enable only HTTPS traffic through App Service')
+@description('Minimum TLS Version allowed')
 @allowed([
   '1.0'
   '1.1'
   '1.2'
 ])
-param app_min_tls_v string
+param app_min_tls_v string = '1.2'
 
 @description('Enable app Virtual Network Integration by providing a subnet ID')
 param snet_plan_vnet_integration_id string = ''
 
-@description('subnet ID to Enbable App Private Endpoints Connections')
+@description('subnet ID to Enable App Private Endpoints Connections')
 param snet_app_vnet_pe_id string = ''
 
 @description('Create a Private DNS Zone link to the Private Endpoint Vnet. If the link exists the deployment fails')
