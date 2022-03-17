@@ -192,7 +192,6 @@ module ABVnetPE '../main.bicep' = {
 // ------------------------------------------------------------------------------------------------
 // App Service Vnet Integration & PE
 // ------------------------------------------------------------------------------------------------
-
 module VnetIntegrationVnetPE '../main.bicep' = {
   name: 'VnetIntegrationVnetPE'
   params: {
