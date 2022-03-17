@@ -35,4 +35,4 @@ az deployment group create \
 --template-file examples/examples.bicep
 ```
 
-[1]: .examples/examples.bicep
+[1]: ./examples/examples.bicep
