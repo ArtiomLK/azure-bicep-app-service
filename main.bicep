@@ -3,7 +3,7 @@
 // ------------------------------------------------------------------------------------------------
 @description('Az Resources tags')
 param tags object = {}
-@description('Az Resources deployment location')
+@description('Az Resource deployment location')
 param location string = resourceGroup().location
 
 // ------------------------------------------------------------------------------------------------
