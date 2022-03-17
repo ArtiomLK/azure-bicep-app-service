@@ -15,6 +15,10 @@
 | app_pe_create_virtual_network_link | Create a Private DNS Zone link to the Private Endpoint Vnet. If the link exists the deployment fails | bool   | `false` \| `true`                                                                                                                                      |
 | pdnsz_app_id                       | App Service Private DNS Zone Resource ID where the A records will be written                         | string | `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rg-name/providers/Microsoft.Network/privateDnsZones/privatelink.azurewebsites.net` |
 
+## [Examples][1]
+
+[Check out the following referenced examples][1]
+
 ## Locally test Azure Bicep Modules
 
 ```bash
@@ -30,3 +34,5 @@ az deployment group create \
 --mode Complete \
 --template-file examples/examples.bicep
 ```
+
+[1]: .examples/examples.bicep
