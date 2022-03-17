@@ -17,7 +17,7 @@ var app_names_parsed = split(app_names, ',')
 param plan_id string
 
 @description('Enable only HTTPS traffic through App Service')
-param app_enable_https_only bool
+param app_enable_https_only bool = false
 
 // ------------------------------------------------------------------------------------------------
 // Application Topology parameters
