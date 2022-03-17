@@ -218,8 +218,8 @@ resource LinuxAppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   location: location
   kind: 'linux'
   sku: {
-    name: 'P1V3'
-    tier: 'PremiumV3'
+    name: 'S2'
+    tier: 'Standard'
     capacity: plan_enable_zone_redundancy ? 3 : 1
   }
   properties: {
