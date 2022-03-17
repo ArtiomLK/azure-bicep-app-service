@@ -28,7 +28,7 @@ param app_enable_https_only bool = false
   '1.1'
   '1.2'
 ])
-param app_min_tls_v string
+param app_min_tls_v string = '1.2'
 
 @description('Enable app Virtual Network Integration by providing a subnet ID')
 param snet_plan_vnet_integration_id string = ''
