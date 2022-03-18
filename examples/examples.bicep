@@ -10,19 +10,16 @@ var tags = {
 }
 
 // Sample App Service Plan parameters
-param plan_n string = 'plan-azure-bicep-app-service-test'
-param plan_sku_code string = 'P1V3'
-param plan_sku_tier string = 'PremiumV3'
 param plan_enable_zone_redundancy bool = false
 
-// Create a Sample App Service Plan
+// Create a Windows Sample App Service Plan
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   tags: tags
-  name: plan_n
+  name: 'plan-azure-bicep-app-service-test'
   location: location
   sku: {
-    name: plan_sku_code
-    tier: plan_sku_tier
+    name: 'P1V3'
+    tier: 'PremiumV3'
     capacity: plan_enable_zone_redundancy ? 3 : 1
   }
   properties: {
@@ -34,6 +31,10 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 // REPLACE
 // '../main.bicep' by the ref with your version, for example:
 // 'br:bicephubdev.azurecr.io/bicep/modules/app:v1'
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// Windows App Service examples
 // ------------------------------------------------------------------------------------------------
 module Http '../main.bicep' = {
   name: 'Http'
@@ -204,5 +205,68 @@ module VnetIntegrationVnetPE '../main.bicep' = {
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
     pdnsz_app_id: pdnsz.id
     app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
+  }
+}
+
+// ------------------------------------------------------------------------------------------------
+// Linux App Service examples
+// ------------------------------------------------------------------------------------------------
+resource LinuxAppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
+  tags: tags
+  name: 'plan-azure-bicep-linux-app-service-test'
+  location: location
+  kind: 'linux'
+  sku: {
+    name: 'S2'
+    tier: 'Standard'
+    capacity: plan_enable_zone_redundancy ? 3 : 1
+  }
+  properties: {
+    reserved: true
+    zoneRedundant: plan_enable_zone_redundancy
+  }
+}
+
+module LinuxHttp '../main.bicep' = {
+  name: 'LinuxHttp'
+  params: {
+    location: location
+    app_enable_https_only: false
+    app_names: take('LinuxHttp-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: LinuxAppServicePlan.id
+    app_min_tls_v: '1.2'
+  }
+}
+
+module LinuxHttpS '../main.bicep' = {
+  name: 'LinuxHttpS'
+  params: {
+    location: location
+    app_enable_https_only: true
+    app_names: take('LinuxHttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: LinuxAppServicePlan.id
+    app_min_tls_v: '1.1'
+  }
+}
+
+module LinuxABHttp '../main.bicep' = {
+  name: 'LinuxABHttp'
+  params: {
+    location: location
+    app_enable_https_only: false
+    app_names: '${take('Linux-A-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('Linux-B-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    plan_id: LinuxAppServicePlan.id
+    app_min_tls_v: '1.0'
+  }
+}
+
+module LinuxABHttps '../main.bicep' = {
+  name: 'LinuxABHttps'
+  params: {
+    location: location
+    app_enable_https_only: true
+    app_names: '${take('Linux-A-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('Linux-B-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    plan_id: LinuxAppServicePlan.id
+    app_min_tls_v: '1.2'
   }
 }
