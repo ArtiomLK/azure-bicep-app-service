@@ -232,7 +232,7 @@ module LinuxHttp '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: false
-    app_names: take('Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_names: take('LinuxHttp-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.2'
   }
@@ -243,7 +243,7 @@ module LinuxHttpS '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: true
-    app_names: take('HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_names: take('LinuxHttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.1'
   }
