@@ -19,11 +19,6 @@ param plan_id string
 @description('Enable only HTTPS traffic through App Service')
 param app_enable_https_only bool = false
 
-@description('App Service Runtime Stack Type.')
-param runtime_stack_n string = 'node'
-@description('App Service Runtime Stack Version.')
-param runtime_stack_v string = '~16'
-
 // ------------------------------------------------------------------------------------------------
 // Application Topology parameters
 // ------------------------------------------------------------------------------------------------
