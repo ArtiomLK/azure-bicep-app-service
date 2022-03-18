@@ -222,6 +222,7 @@ resource LinuxAppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
     capacity: plan_enable_zone_redundancy ? 3 : 1
   }
   properties: {
+    reserved: true
     zoneRedundant: plan_enable_zone_redundancy
   }
 }
