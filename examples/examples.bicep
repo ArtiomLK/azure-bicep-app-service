@@ -34,7 +34,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 // ------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------
-// Linux App Service Plan examples
+// Windows App Service examples
 // ------------------------------------------------------------------------------------------------
 module Http '../main.bicep' = {
   name: 'Http'
@@ -209,9 +209,8 @@ module VnetIntegrationVnetPE '../main.bicep' = {
 }
 
 // ------------------------------------------------------------------------------------------------
-// Linux App Service Plan examples
+// Linux App Service examples
 // ------------------------------------------------------------------------------------------------
-// Create a Windows Sample App Service Plan
 resource LinuxAppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   tags: tags
   name: 'plan-azure-bicep-linux-app-service-test'
