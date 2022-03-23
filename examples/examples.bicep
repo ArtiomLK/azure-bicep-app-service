@@ -213,7 +213,7 @@ module ABVnetIntegrationVnetPE '../main.bicep' = {
   params: {
     location: location
     app_enable_https_only: false
-    app_names: '${take('AVnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('BVnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_names: '${take('A-VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
