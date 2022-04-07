@@ -1,10 +1,6 @@
 # Azure App Service
 
-[![DEV - Deploy Azure Resource](https://github.com/ArtiomLK/azure-bicep-app-service/actions/workflows/dev.orchestrator.yml/badge.svg?branch=main)](https://github.com/ArtiomLK/azure-bicep-app-service/actions/workflows/dev.orchestrator.yml)
-
-[![DEV - Deploy Azure Resource](https://github.com/ArtiomLK/azure-bicep-app-service/actions/workflows/dev.orchestrator.yml/badge.svg?branch=main&event=workflow_run)](https://github.com/ArtiomLK/azure-bicep-app-service/actions/workflows/dev.orchestrator.yml)
-
-[![PROD - Deploy Azure Resource](https://github.com/ArtiomLK/azure-bicep-app-service/actions/workflows/prod.orchestrator.yml/badge.svg?branch=main&event=workflow_run)](https://github.com/ArtiomLK/azure-bicep-app-service/actions/workflows/prod.orchestrator.yml)
+[![DEV - Deploy Azure Resource](https://github.com/ArtiomLK/azure-bicep-app-service/actions/workflows/dev.orchestrator.yml/badge.svg?branch=main&event=push)](https://github.com/ArtiomLK/azure-bicep-app-service/actions/workflows/dev.orchestrator.yml)
 
 ## Instructions
 
