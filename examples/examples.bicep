@@ -197,7 +197,7 @@ module VnetIntegrationVnetPE '../main.bicep' = {
   name: 'VnetIntegrationVnetPE'
   params: {
     location: location
-    app_enable_https_only: false
+    app_enable_https_only: asdfafds
     app_names: take('VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
