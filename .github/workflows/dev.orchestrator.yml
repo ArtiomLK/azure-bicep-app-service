@@ -1,7 +1,5 @@
-on:
-  push:
-    paths-ignore:
-      - README.md
+on: [push]
+
 env:
   ACR_MODULE_N: app
   RG_N: rg-azure-bicep-app-service
