@@ -52,7 +52,7 @@ az deployment group create \
 
 **Cool Down**: The amount of time to wait after a scale operation before scaling again. For example, if cooldown is 10 minutes and a scale operation just occurred, Autoscale will not attempt to scale again until after 10 minutes. This is to allow the metrics to stabilize first.
 
-### Scale Out
+### Scale out
 
 1. CPU Average > 60%
    1. Duration: 5 minutes
