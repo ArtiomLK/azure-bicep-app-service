@@ -82,6 +82,18 @@ az deployment group create \
    2. Cool Down: 15 minutes
    3. Decrease Count by: 1
 
+## Debug
+
+Open the app service console and run `tcpping cname` or `tcpping ip`
+
+```bash
+tcpping ##.##.##.###
+tcpping http://contoso.com
+tcpping https://contoso.com
+tcpping contoso.com
+tcpping <yourapp>.azurewebsites.net
+```
+
 ## Additional Resources
 
 - App Service
@@ -90,6 +102,8 @@ az deployment group create \
 - Monitoring
 - [MS | Docs | Azure Monitor Logs table reference organized by resource type][5]
 - [MS | Docs | Enable diagnostics logging for apps in Azure App Service | Supported log types][2]
+- Debug
+- [MS | blog | How to ping from an Azure App service with TCPPING][7]
 - Build 2022
 - [MS | techcommunity | What's New in Azure App Service at Build 2022][6]
 
@@ -99,3 +113,4 @@ az deployment group create \
 [4]: https://docs.microsoft.com/en-us/azure/azure-monitor/autoscale/autoscale-best-practices
 [5]: https://docs.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-resourcetype
 [6]: https://techcommunity.microsoft.com/t5/apps-on-azure-blog/what-s-new-in-azure-app-service-at-build-2022/ba-p/3407584
+[7]: https://www.code4it.dev/blog/tcpping-azure-portal
