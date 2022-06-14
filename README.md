@@ -90,9 +90,12 @@ az deployment group create \
 - Monitoring
 - [MS | Docs | Azure Monitor Logs table reference organized by resource type][5]
 - [MS | Docs | Enable diagnostics logging for apps in Azure App Service | Supported log types][2]
+- Build 2022
+- [MS | techcommunity | What's New in Azure App Service at Build 2022][6]
 
 [1]: ./examples/examples.bicep
 [2]: https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-diagnostic-logs
 [3]: https://azure.microsoft.com/en-us/pricing/details/app-service/windows/
 [4]: https://docs.microsoft.com/en-us/azure/azure-monitor/autoscale/autoscale-best-practices
 [5]: https://docs.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-resourcetype
+[6]: https://techcommunity.microsoft.com/t5/apps-on-azure-blog/what-s-new-in-azure-app-service-at-build-2022/ba-p/3407584
