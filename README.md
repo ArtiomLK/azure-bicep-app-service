@@ -104,6 +104,9 @@ tcpping <yourapp>.azurewebsites.net
 - [MS | Docs | Enable diagnostics logging for apps in Azure App Service | Supported log types][2]
 - Debug
 - [MS | blog | How to ping from an Azure App service with TCPPING][7]
+- Azure Migrate
+- [MS | blog | Tutorial: Discover servers running in a VMware environment with Azure Migrate][8]
+- [MS | blog | Provide server credentials to discover software inventory, dependencies, web apps, and SQL Server instances and databases][9]
 - Build 2022
 - [MS | techcommunity | What's New in Azure App Service at Build 2022][6]
 
@@ -114,3 +117,5 @@ tcpping <yourapp>.azurewebsites.net
 [5]: https://docs.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-resourcetype
 [6]: https://techcommunity.microsoft.com/t5/apps-on-azure-blog/what-s-new-in-azure-app-service-at-build-2022/ba-p/3407584
 [7]: https://www.code4it.dev/blog/tcpping-azure-portal
+[8]: https://docs.microsoft.com/en-us/azure/migrate/tutorial-discover-vmware#create-an-account-to-access-servers
+[9]: https://docs.microsoft.com/en-us/azure/migrate/add-server-credentials
