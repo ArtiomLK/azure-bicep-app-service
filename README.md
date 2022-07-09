@@ -87,16 +87,15 @@ az deployment group create \
 - App Service -> Diagnose and solve problems
 - App Insight Profiler
 - App Insights Workbooks
+- Open the app service console and run `tcpping cname` or `tcpping ip`
 
-Open the app service console and run `tcpping cname` or `tcpping ip`
-
-```bash
-tcpping ##.##.##.###
-tcpping http://contoso.com
-tcpping https://contoso.com
-tcpping contoso.com
-tcpping <yourapp>.azurewebsites.net
-```
+   ```bash
+   tcpping ##.##.##.###
+   tcpping http://contoso.com
+   tcpping https://contoso.com
+   tcpping contoso.com
+   tcpping <yourapp>.azurewebsites.net
+   ```
 
 ## Logs
 
