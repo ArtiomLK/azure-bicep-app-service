@@ -84,14 +84,28 @@ az deployment group create \
 
 ## Debug
 
-Open the app service console and run `tcpping cname` or `tcpping ip`
+- App Service -> Diagnose and solve problems
+- App Insight Profiler
+- App Insights Workbooks
+- Open the app service console and run `tcpping cname` or `tcpping ip`
 
-```bash
-tcpping ##.##.##.###
-tcpping http://contoso.com
-tcpping https://contoso.com
-tcpping contoso.com
-tcpping <yourapp>.azurewebsites.net
+   ```bash
+   tcpping ##.##.##.###
+   tcpping http://contoso.com
+   tcpping https://contoso.com
+   tcpping contoso.com
+   tcpping <yourapp>.azurewebsites.net
+   ```
+
+## Logs
+
+### App Insights
+
+```java (Kusto)
+// appi dependencies
+// Which dependencies take more than a minute to complete
+AppDependencies
+| where todouble(DurationMs) >= 60000
 ```
 
 ## Additional Resources
@@ -99,11 +113,20 @@ tcpping <yourapp>.azurewebsites.net
 - App Service
 - [MS | Docs | App Service pricing][3]
 - [MS | Docs | Best practices for Autoscale][4]
+- [MS | Docs | Inside the Azure App Service Architecture][11]
 - Monitoring
 - [MS | Docs | Azure Monitor Logs table reference organized by resource type][5]
 - [MS | Docs | Enable diagnostics logging for apps in Azure App Service | Supported log types][2]
+- App Insights
+- [MS | Docs | Profile production applications in Azure with Application Insights][14]
+  - [MS | Docs | Windows Performance Analyzer][9]
+- [MS | Docs | Dependency Tracking in Azure Application Insights][12]
+- [MS | Docs | Debug snapshots on exceptions in .NET apps][13]
 - Debug
+- [MS | Docs | Troubleshoot slow app performance issues in Azure App Service][10]
 - [MS | blog | How to ping from an Azure App service with TCPPING][7]
+- Log
+- [MS | Docs | Samples for Kusto Queries][8]
 - Build 2022
 - [MS | techcommunity | What's New in Azure App Service at Build 2022][6]
 
@@ -114,3 +137,10 @@ tcpping <yourapp>.azurewebsites.net
 [5]: https://docs.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-resourcetype
 [6]: https://techcommunity.microsoft.com/t5/apps-on-azure-blog/what-s-new-in-azure-app-service-at-build-2022/ba-p/3407584
 [7]: https://www.code4it.dev/blog/tcpping-azure-portal
+[8]: https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/samples
+[9]: https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer
+[10]: https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-performance-degradation
+[11]: https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/february/azure-inside-the-azure-app-service-architecture
+[12]: https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-dependencies
+[13]: https://docs.microsoft.com/en-us/azure/azure-monitor/snapshot-debugger/snapshot-debugger
+[14]: https://docs.microsoft.com/en-us/azure/azure-monitor/profiler/profiler-overview
