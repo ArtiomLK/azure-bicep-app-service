@@ -119,7 +119,7 @@ AppDependencies
 - [MS | Docs | Enable diagnostics logging for apps in Azure App Service | Supported log types][2]
 - App Insights
 - [MS | Docs | Profile production applications in Azure with Application Insights][14]
-  - [MS | Docs | Windows Performance Analyzer][2]
+  - [MS | Docs | Windows Performance Analyzer][9]
 - [MS | Docs | Dependency Tracking in Azure Application Insights][12]
 - [MS | Docs | Debug snapshots on exceptions in .NET apps][13]
 - Debug
