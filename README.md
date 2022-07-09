@@ -114,10 +114,17 @@ AppDependencies
 - App Service
 - [MS | Docs | App Service pricing][3]
 - [MS | Docs | Best practices for Autoscale][4]
+- [MS | Docs | Inside the Azure App Service Architecture][11]
 - Monitoring
 - [MS | Docs | Azure Monitor Logs table reference organized by resource type][5]
 - [MS | Docs | Enable diagnostics logging for apps in Azure App Service | Supported log types][2]
+- App Insights
+- [MS | Docs | Profile production applications in Azure with Application Insights][14]
+- [MS | Docs | Dependency Tracking in Azure Application Insights][2]
+- [MS | Docs | Debug snapshots on exceptions in .NET apps][13]
+- [MS | Docs | Windows Performance Analyzer][2]
 - Debug
+- [MS | Docs | Troubleshoot slow app performance issues in Azure App Service][10]
 - [MS | blog | How to ping from an Azure App service with TCPPING][7]
 - Log
 - [MS | Docs | Samples for Kusto Queries][8]
@@ -132,3 +139,9 @@ AppDependencies
 [6]: https://techcommunity.microsoft.com/t5/apps-on-azure-blog/what-s-new-in-azure-app-service-at-build-2022/ba-p/3407584
 [7]: https://www.code4it.dev/blog/tcpping-azure-portal
 [8]: https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/samples
+[9]: https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer
+[10]: https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-performance-degradation
+[11]: https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/february/azure-inside-the-azure-app-service-architecture
+[12]: https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-dependencies
+[13]: https://docs.microsoft.com/en-us/azure/azure-monitor/snapshot-debugger/snapshot-debugger
+[14]: https://docs.microsoft.com/en-us/azure/azure-monitor/profiler/profiler-overview
