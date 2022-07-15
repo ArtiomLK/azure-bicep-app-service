@@ -15,6 +15,10 @@ param app_n string
 @description('App Service Plan resource ID')
 param plan_id string
 
+@description('App Insights Instrumentation key')
+@secure()
+param appi_k string = ''
+
 @description('Enable only HTTPS traffic through App Service')
 param app_enable_https_only bool = false
 
@@ -118,6 +122,49 @@ module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkp
     enable_pdnsz_autoregistration: false
     pdnsz_app_id: pdnsz_app_id
     tags: tags
+  }
+}
+
+// ------------------------------------------------------------------------------------------------
+// Link App Insights appi
+// ------------------------------------------------------------------------------------------------
+resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'appsettings'
+  properties: {
+    APPINSIGHTS_INSTRUMENTATIONKEY: appi_k
+  }
+  dependsOn: [
+    appServiceSiteExtension
+  ]
+}
+
+resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'Microsoft.ApplicationInsights.AzureWebSites'
+}
+
+resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'logs'
+  properties: {
+    applicationLogs: {
+      fileSystem: {
+        level: 'Warning'
+      }
+    }
+    httpLogs: {
+      fileSystem: {
+        retentionInMb: 40
+        enabled: true
+      }
+    }
+    failedRequestsTracing: {
+      enabled: true
+    }
+    detailedErrorMessages: {
+      enabled: true
+    }
   }
 }
 

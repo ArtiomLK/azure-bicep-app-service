@@ -27,6 +27,8 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   }
 }
 
+param log_n string = 'log-test'
+param appi_n string = 'appi-test'
 // ------------------------------------------------------------------------------------------------
 // REPLACE
 // '../main.bicep' by the ref with your version, for example:
@@ -205,22 +207,6 @@ module VnetIntegrationVnetPE '../main.bicep' = {
   }
 }
 
-module ABVnetIntegrationVnetPE '../main.bicep' = {
-  name: 'ABVnetIntegrationVnetPE'
-  params: {
-    tags: tags
-    location: location
-    app_enable_https_only: false
-    app_n: take('A-VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
-    plan_id: appServicePlan.id
-    app_min_tls_v: '1.2'
-    snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
-    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
-    pdnsz_app_id: pdnsz.id
-    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
-  }
-}
-
 // ------------------------------------------------------------------------------------------------
 // Linux App Service examples
 // ------------------------------------------------------------------------------------------------
@@ -273,5 +259,71 @@ module LinuxTLS12 '../main.bicep' = {
     app_n: take('Linux-TLS-12-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.2'
+  }
+}
+
+// Link Appi
+// ------------------------------------------------------------------------------------------------
+// Deploy Log Analytics Workspaces
+// ------------------------------------------------------------------------------------------------
+
+module log '../modules/log/log.bicep' = {
+  name: log_n
+  params: {
+    location: location
+    name: log_n
+  }
+}
+
+// ------------------------------------------------------------------------------------------------
+// Deploy App Insight Services
+// ------------------------------------------------------------------------------------------------
+// module appi '../modules/appi/appi.bicep' = {
+//   name: appi_n
+//   params: {
+//     location: location
+//     log_id: log.outputs.id
+//     name: appi_n
+//   }
+// }
+
+resource appi 'Microsoft.Insights/components@2020-02-02' = {
+  name: appi_n
+  location: location
+  kind: 'string'
+  tags: tags
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: log.outputs.id
+  }
+}
+
+module AppiLinux '../main.bicep' = {
+  name: 'appi-linux'
+  params: {
+    tags: tags
+    location: location
+    app_enable_https_only: true
+    app_n: take('Appi-Linux-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: LinuxAppServicePlan.id
+    app_min_tls_v: '1.2'
+    appi_k: appi.properties.InstrumentationKey
+  }
+}
+
+module AppiWindows '../main.bicep' = {
+  name: 'appi-windows'
+  params: {
+    tags: tags
+    location: location
+    app_enable_https_only: false
+    app_n: take('Appi-Windows-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+    snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
+    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
+    pdnsz_app_id: pdnsz.id
+    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
+    appi_k: appi.properties.InstrumentationKey
   }
 }
