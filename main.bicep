@@ -122,3 +122,4 @@ module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkp
 }
 
 output app object = appService
+output id string = appService.id
