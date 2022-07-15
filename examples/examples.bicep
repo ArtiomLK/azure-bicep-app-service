@@ -39,42 +39,34 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 module Http '../main.bicep' = {
   name: 'Http'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: take('Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
-    app_min_tls_v: '1.2'
+    app_min_tls_v: '1.0'
   }
 }
 
 module HttpS '../main.bicep' = {
   name: 'HttpS'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: true
-    app_names: take('HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.1'
   }
 }
 
-module ABHttp '../main.bicep' = {
-  name: 'ABHttp'
+module TLS12 '../main.bicep' = {
+  name: 'TLS12'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: '${take('A-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
-    plan_id: appServicePlan.id
-    app_min_tls_v: '1.0'
-  }
-}
-
-module ABHttps '../main.bicep' = {
-  name: 'ABHttps'
-  params: {
-    location: location
-    app_enable_https_only: true
-    app_names: '${take('A-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_n: take('TLS12-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
   }
@@ -138,9 +130,10 @@ resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 module VnetIntegration '../main.bicep' = {
   name: 'VnetIntegration'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: take('VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -150,9 +143,10 @@ module VnetIntegration '../main.bicep' = {
 module ABVnetIntegration '../main.bicep' = {
   name: 'ABCVnetIntegration'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: '${take('A-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_n: take('A-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -165,9 +159,10 @@ module ABVnetIntegration '../main.bicep' = {
 module VnetPE '../main.bicep' = {
   name: 'VnetPE'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: take('VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
@@ -179,9 +174,10 @@ module VnetPE '../main.bicep' = {
 module ABVnetPE '../main.bicep' = {
   name: 'ABVnetPE'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: '${take('A-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_n: take('A-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
@@ -196,9 +192,10 @@ module ABVnetPE '../main.bicep' = {
 module VnetIntegrationVnetPE '../main.bicep' = {
   name: 'VnetIntegrationVnetPE'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: take('VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -211,9 +208,10 @@ module VnetIntegrationVnetPE '../main.bicep' = {
 module ABVnetIntegrationVnetPE '../main.bicep' = {
   name: 'ABVnetIntegrationVnetPE'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: '${take('A-VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('B-VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_n: take('A-VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -245,42 +243,34 @@ resource LinuxAppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 module LinuxHttp '../main.bicep' = {
   name: 'LinuxHttp'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
-    app_names: take('LinuxHttp-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('LinuxHttp-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
-    app_min_tls_v: '1.2'
+    app_min_tls_v: '1.0'
   }
 }
 
 module LinuxHttpS '../main.bicep' = {
   name: 'LinuxHttpS'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: true
-    app_names: take('LinuxHttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('LinuxHttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.1'
   }
 }
 
-module LinuxABHttp '../main.bicep' = {
-  name: 'LinuxABHttp'
+module LinuxTLS12 '../main.bicep' = {
+  name: 'LinuxTLS12'
   params: {
-    location: location
-    app_enable_https_only: false
-    app_names: '${take('Linux-A-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('Linux-B-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
-    plan_id: LinuxAppServicePlan.id
-    app_min_tls_v: '1.0'
-  }
-}
-
-module LinuxABHttps '../main.bicep' = {
-  name: 'LinuxABHttps'
-  params: {
+    tags: tags
     location: location
     app_enable_https_only: true
-    app_names: '${take('Linux-A-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)},${take('Linux-B-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)}'
+    app_n: take('Linux-TLS-12-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.2'
   }

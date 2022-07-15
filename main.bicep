@@ -9,9 +9,8 @@ param location string = resourceGroup().location
 // ------------------------------------------------------------------------------------------------
 // Application parameters
 // ------------------------------------------------------------------------------------------------
-@description('App Service Names separated by commas. For example: applicationA | applicationA,applicationB | applicationA,applicationB,applicationC')
-param app_names string
-var app_names_parsed = split(app_names, ',')
+@description('App Service Name For example: applicationA')
+param app_n string
 
 @description('App Service Plan resource ID')
 param plan_id string
@@ -67,23 +66,23 @@ var app_properties_w_vnet_integration = union(app_properties, {
 // ------------------------------------------------------------------------------------------------
 // Deploy Azure Resources
 // ------------------------------------------------------------------------------------------------
-resource appService 'Microsoft.Web/sites@2021-03-01' = [for i in range(0, length(app_names_parsed)): {
-  name: app_names_parsed[i]
+resource appService 'Microsoft.Web/sites@2021-03-01' = {
+  name: app_n
   location: location
   properties: empty(snet_plan_vnet_integration_id) ? app_properties : app_properties_w_vnet_integration
   tags: tags
-}]
+}
 
-resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = [for i in range(0, length(app_names_parsed)): if (!empty(snet_app_vnet_pe_id)) {
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = if (!empty(snet_app_vnet_pe_id)) {
   tags: tags
-  name: 'pe-${app_names_parsed[i]}'
+  name: 'pe-${app_n}'
   location: location
   properties: {
     privateLinkServiceConnections: [
       {
-        name: 'pe-${app_names_parsed[i]}-${take(guid(subscription().id, app_names_parsed[i], resourceGroup().name), 4)}'
+        name: 'pe-${app_n}-${take(guid(subscription().id, app_n, resourceGroup().name), 4)}'
         properties: {
-          privateLinkServiceId: '${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/sites/${appService[i].name}'
+          privateLinkServiceId: '${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/sites/${appService.name}'
           groupIds: [
             'sites'
           ]
@@ -94,14 +93,11 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = [for 
       id: snet_app_vnet_pe_id
     }
   }
-  dependsOn: [
-    appService
-  ]
-}]
+}
 
 // App Private DNS Zone Group - A Record
-resource zoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-08-01' = [for i in range(0, length(app_names_parsed)): if (!empty(snet_app_vnet_pe_id)) {
-  name: '${privateEndpoint[i].name}/default'
+resource zoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-08-01' = if (!empty(snet_app_vnet_pe_id)) {
+  name: '${privateEndpoint.name}/default'
   properties: {
     privateDnsZoneConfigs: [
       {
@@ -112,10 +108,7 @@ resource zoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020
       }
     ]
   }
-  dependsOn: [
-    privateEndpoint
-  ]
-}]
+}
 
 module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkprivatednszonesvirtualnetworklinks:b066cd77ae1236f4b0e18c6a2c530aa5518de854' = if (!empty(snet_app_vnet_pe_id) && app_pe_create_virtual_network_link) {
   name: 'pdnsVnetLinkDeployment'
@@ -128,8 +121,5 @@ module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkp
   }
 }
 
-output appServices array = [for (name, i) in app_names_parsed: {
-  id: appService[i].id
-  app_n: appService[i].name
-  app_fqdn: '${appService[i].name}.azurewebsites.net'
-}]
+output app object = appService
+output id string = appService.id
