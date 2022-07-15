@@ -298,18 +298,18 @@ resource appi 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-module AppiLinux '../main.bicep' = {
-  name: 'appi-linux'
-  params: {
-    tags: tags
-    location: location
-    app_enable_https_only: true
-    app_n: take('Appi-Linux-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
-    plan_id: LinuxAppServicePlan.id
-    app_min_tls_v: '1.2'
-    appi_k: appi.properties.InstrumentationKey
-  }
-}
+// module AppiLinux '../main.bicep' = {
+//   name: 'appi-linux'
+//   params: {
+//     tags: tags
+//     location: location
+//     app_enable_https_only: true
+//     app_n: take('Appi-Linux-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+//     plan_id: LinuxAppServicePlan.id
+//     app_min_tls_v: '1.2'
+//     appi_k: appi.properties.InstrumentationKey
+//   }
+// }
 
 module AppiWindows '../main.bicep' = {
   name: 'appi-windows'
