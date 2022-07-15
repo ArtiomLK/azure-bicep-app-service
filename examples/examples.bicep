@@ -262,9 +262,8 @@ module LinuxTLS12 '../main.bicep' = {
   }
 }
 
-// Link Appi
 // ------------------------------------------------------------------------------------------------
-// Deploy Log Analytics Workspaces
+// Deploy Log Analytics Workspace
 // ------------------------------------------------------------------------------------------------
 
 module log '../modules/log/log.bicep' = {
@@ -276,7 +275,7 @@ module log '../modules/log/log.bicep' = {
 }
 
 // ------------------------------------------------------------------------------------------------
-// Deploy App Insight Services
+// Deploy App Insight Service
 // ------------------------------------------------------------------------------------------------
 
 resource appi 'Microsoft.Insights/components@2020-02-02' = {
@@ -290,13 +289,30 @@ resource appi 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
+// ------------------------------------------------------------------------------------------------
+// Test Appi Link
+// ------------------------------------------------------------------------------------------------
+
 module AppiWindows '../main.bicep' = {
-  name: 'appi-windows'
+  name: 'AppiWindows'
+  params: {
+    tags: tags
+    location: location
+    app_enable_https_only: true
+    app_n: take('AppiWindows-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.1'
+    appi_k: appi.properties.InstrumentationKey
+  }
+}
+
+module AppiWindowsVnetPE '../main.bicep' = {
+  name: 'appi-windows-VnetPe'
   params: {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('Appi-Windows-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Appi-Windows-VnetPE${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id

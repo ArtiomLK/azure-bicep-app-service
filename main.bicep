@@ -73,9 +73,6 @@ var app_properties_w_vnet_integration = union(app_properties, {
 resource appService 'Microsoft.Web/sites@2021-03-01' = {
   name: app_n
   location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
   properties: empty(snet_plan_vnet_integration_id) ? app_properties : app_properties_w_vnet_integration
   tags: tags
 }
