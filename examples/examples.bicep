@@ -278,14 +278,6 @@ module log '../modules/log/log.bicep' = {
 // ------------------------------------------------------------------------------------------------
 // Deploy App Insight Services
 // ------------------------------------------------------------------------------------------------
-// module appi '../modules/appi/appi.bicep' = {
-//   name: appi_n
-//   params: {
-//     location: location
-//     log_id: log.outputs.id
-//     name: appi_n
-//   }
-// }
 
 resource appi 'Microsoft.Insights/components@2020-02-02' = {
   name: appi_n
@@ -297,19 +289,6 @@ resource appi 'Microsoft.Insights/components@2020-02-02' = {
     WorkspaceResourceId: log.outputs.id
   }
 }
-
-// module AppiLinux '../main.bicep' = {
-//   name: 'appi-linux'
-//   params: {
-//     tags: tags
-//     location: location
-//     app_enable_https_only: true
-//     app_n: take('Appi-Linux-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
-//     plan_id: LinuxAppServicePlan.id
-//     app_min_tls_v: '1.2'
-//     appi_k: appi.properties.InstrumentationKey
-//   }
-// }
 
 module AppiWindows '../main.bicep' = {
   name: 'appi-windows'
