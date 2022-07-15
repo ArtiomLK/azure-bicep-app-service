@@ -39,6 +39,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 module Http '../main.bicep' = {
   name: 'Http'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -50,6 +51,7 @@ module Http '../main.bicep' = {
 module HttpS '../main.bicep' = {
   name: 'HttpS'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: true
     app_n: take('HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -61,6 +63,7 @@ module HttpS '../main.bicep' = {
 module TLS12 '../main.bicep' = {
   name: 'TLS12'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('TLS12-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -127,6 +130,7 @@ resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 module VnetIntegration '../main.bicep' = {
   name: 'VnetIntegration'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -139,6 +143,7 @@ module VnetIntegration '../main.bicep' = {
 module ABVnetIntegration '../main.bicep' = {
   name: 'ABCVnetIntegration'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('A-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -154,6 +159,7 @@ module ABVnetIntegration '../main.bicep' = {
 module VnetPE '../main.bicep' = {
   name: 'VnetPE'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -168,6 +174,7 @@ module VnetPE '../main.bicep' = {
 module ABVnetPE '../main.bicep' = {
   name: 'ABVnetPE'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('A-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -185,6 +192,7 @@ module ABVnetPE '../main.bicep' = {
 module VnetIntegrationVnetPE '../main.bicep' = {
   name: 'VnetIntegrationVnetPE'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -200,6 +208,7 @@ module VnetIntegrationVnetPE '../main.bicep' = {
 module ABVnetIntegrationVnetPE '../main.bicep' = {
   name: 'ABVnetIntegrationVnetPE'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('A-VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -234,6 +243,7 @@ resource LinuxAppServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 module LinuxHttp '../main.bicep' = {
   name: 'LinuxHttp'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: false
     app_n: take('LinuxHttp-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -245,6 +255,7 @@ module LinuxHttp '../main.bicep' = {
 module LinuxHttpS '../main.bicep' = {
   name: 'LinuxHttpS'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: true
     app_n: take('LinuxHttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
@@ -256,6 +267,7 @@ module LinuxHttpS '../main.bicep' = {
 module LinuxTLS12 '../main.bicep' = {
   name: 'LinuxTLS12'
   params: {
+    tags: tags
     location: location
     app_enable_https_only: true
     app_n: take('Linux-TLS-12-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
