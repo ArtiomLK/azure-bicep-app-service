@@ -60,6 +60,10 @@ var app_properties = {
   httpsOnly: app_enable_https_only
   siteConfig: {
     minTlsVersion: app_min_tls_v
+    detailedErrorLoggingEnabled : !empty(appi_k)
+    httpLoggingEnabled: !empty(appi_k)
+    remoteDebuggingEnabled: !empty(appi_k)
+    requestTracingEnabled: !empty(appi_k)
   }
  }
 
@@ -139,11 +143,6 @@ resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(a
   ]
 }
 
-resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
-  parent: appService
-  name: 'Microsoft.ApplicationInsights.AzureWebSites'
-}
-
 resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
   parent: appService
   name: 'logs'
@@ -166,6 +165,14 @@ resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!emp
       enabled: true
     }
   }
+  dependsOn: [
+    appServiceSiteExtension
+  ]
+}
+
+resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'Microsoft.ApplicationInsights.AzureWebSites'
 }
 
 output app object = appService
