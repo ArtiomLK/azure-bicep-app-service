@@ -69,7 +69,6 @@ resource appServiceWebSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!emp
   parent: appService
   name: 'web'
   properties: {
-    alwaysOn: true
     minTlsVersion: app_min_tls_v
     detailedErrorLoggingEnabled : !empty(appi_k)
     httpLoggingEnabled: !empty(appi_k)
