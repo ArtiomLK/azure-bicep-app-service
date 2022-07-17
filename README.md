@@ -99,9 +99,11 @@ az deployment group create \
 
 ```bash
 # call app test
-for i in {0..5}
+for i in {0..10}
 do
-  curl -X GET https://www.bing.com;
+  echo "";
+  curl -X GET https://<app_name>.azurewebsites.net;
+  echo "";
 done
 ```
 

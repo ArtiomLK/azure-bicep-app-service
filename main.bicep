@@ -55,30 +55,27 @@ var pdnsz_app_parsed_id = empty(pdnsz_app_id) ? {
   res_n: substring(pdnsz_app_id, lastIndexOf(pdnsz_app_id, '/')+1)
 }
 
-var app_properties = {
-  serverFarmId: plan_id
-  httpsOnly: app_enable_https_only
-  siteConfig: {
-    minTlsVersion: app_min_tls_v
-    detailedErrorLoggingEnabled : !empty(appi_k)
-    httpLoggingEnabled: !empty(appi_k)
-    remoteDebuggingEnabled: !empty(appi_k)
-    requestTracingEnabled: !empty(appi_k)
-  }
- }
-
-var app_properties_w_vnet_integration = union(app_properties, {
-  virtualNetworkSubnetId: snet_plan_vnet_integration_id
-})
-
 // ------------------------------------------------------------------------------------------------
 // Deploy Azure Resources
 // ------------------------------------------------------------------------------------------------
 resource appService 'Microsoft.Web/sites@2021-03-01' = {
   name: app_n
   location: location
-  properties: empty(snet_plan_vnet_integration_id) ? app_properties : app_properties_w_vnet_integration
+  properties: empty(snet_plan_vnet_integration_id) ? {} : { virtualNetworkSubnetId: snet_plan_vnet_integration_id }
   tags: tags
+}
+
+resource appServiceWebSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'web'
+  properties: {
+    alwaysOn: true
+    minTlsVersion: app_min_tls_v
+    detailedErrorLoggingEnabled : !empty(appi_k)
+    httpLoggingEnabled: !empty(appi_k)
+    remoteDebuggingEnabled: !empty(appi_k)
+    requestTracingEnabled: !empty(appi_k)
+  }
 }
 
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = if (!empty(snet_app_vnet_pe_id)) {
@@ -133,23 +130,15 @@ module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkp
 // Link App Insights
 // ------------------------------------------------------------------------------------------------
 
-resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
-  parent: appService
-  name: 'Microsoft.ApplicationInsights.AzureWebSites'
-}
-
 resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
   parent: appService
   name: 'appsettings'
   properties: {
     APPINSIGHTS_INSTRUMENTATIONKEY: appi_k
   }
-  dependsOn: [
-    appServiceSiteExtension
-  ]
 }
 
-resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+resource appServiceLogSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
   parent: appService
   name: 'logs'
   properties: {
@@ -171,9 +160,15 @@ resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(a
       enabled: true
     }
   }
+}
+
+resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'Microsoft.ApplicationInsights.AzureWebSites'
   dependsOn: [
-    appServiceSiteExtension
+    appServiceWebSettings
     appServiceAppSettings
+    appServiceLogSettings
   ]
 }
 
