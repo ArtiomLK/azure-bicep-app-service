@@ -307,7 +307,7 @@ module AppiWindows '../main.bicep' = {
 }
 
 module AppiWindowsVnetPE '../main.bicep' = {
-  name: 'appi-windows-VnetPe'
+  name: 'AppiWindowsVnetPE'
   params: {
     tags: tags
     location: location
@@ -321,4 +321,7 @@ module AppiWindowsVnetPE '../main.bicep' = {
     app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
     appi_k: appi.properties.InstrumentationKey
   }
+  dependsOn: [
+    AppiWindows
+  ]
 }
