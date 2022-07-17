@@ -97,6 +97,14 @@ az deployment group create \
    tcpping <yourapp>.azurewebsites.net
    ```
 
+```bash
+# call app test
+for i in {0..5}
+do
+  curl -X GET https://www.bing.com;
+done
+```
+
 ## Logs
 
 ### App Insights

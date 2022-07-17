@@ -126,7 +126,7 @@ module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkp
 }
 
 // ------------------------------------------------------------------------------------------------
-// Link App Insights appi
+// Link App Insights
 // ------------------------------------------------------------------------------------------------
 resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
   parent: appService
