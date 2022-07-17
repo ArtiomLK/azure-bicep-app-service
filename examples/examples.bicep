@@ -299,7 +299,7 @@ module AppiWindows '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: true
-    app_n: take('AppiWindows-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Appi-Windows-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.1'
     appi_k: appi.properties.InstrumentationKey
