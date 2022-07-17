@@ -132,7 +132,13 @@ module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkp
 // ------------------------------------------------------------------------------------------------
 // Link App Insights
 // ------------------------------------------------------------------------------------------------
-resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+
+resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'Microsoft.ApplicationInsights.AzureWebSites'
+}
+
+resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
   parent: appService
   name: 'appsettings'
   properties: {
@@ -143,7 +149,7 @@ resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(a
   ]
 }
 
-resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
   parent: appService
   name: 'logs'
   properties: {
@@ -167,12 +173,8 @@ resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!emp
   }
   dependsOn: [
     appServiceSiteExtension
+    appServiceAppSettings
   ]
-}
-
-resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
-  parent: appService
-  name: 'Microsoft.ApplicationInsights.AzureWebSites'
 }
 
 output app object = appService
