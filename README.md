@@ -94,7 +94,7 @@ az deployment group create \
    tcpping http://contoso.com
    tcpping https://contoso.com
    tcpping contoso.com
-   tcpping <yourapp>.azurewebsites.net
+   tcpping <app_name>.azurewebsites.net
    ```
 
 ```bash
