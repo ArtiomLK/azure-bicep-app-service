@@ -55,13 +55,22 @@ var pdnsz_app_parsed_id = empty(pdnsz_app_id) ? {
   res_n: substring(pdnsz_app_id, lastIndexOf(pdnsz_app_id, '/')+1)
 }
 
+var app_properties = {
+  serverFarmId: plan_id
+  httpsOnly: app_enable_https_only
+ }
+
+ var app_properties_w_vnet_integration = union(app_properties, {
+  virtualNetworkSubnetId: snet_plan_vnet_integration_id
+})
+
 // ------------------------------------------------------------------------------------------------
 // Deploy Azure Resources
 // ------------------------------------------------------------------------------------------------
 resource appService 'Microsoft.Web/sites@2021-03-01' = {
   name: app_n
   location: location
-  properties: empty(snet_plan_vnet_integration_id) ? {} : { virtualNetworkSubnetId: snet_plan_vnet_integration_id }
+  properties: empty(snet_plan_vnet_integration_id) ? app_properties : app_properties_w_vnet_integration
   tags: tags
 }
 
