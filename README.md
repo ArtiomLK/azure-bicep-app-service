@@ -98,7 +98,7 @@ az deployment group create \
    ```
 
 ```bash
-# Generate http calls for appi review
+# Generate https calls for appi review
 for i in {0..10}
 do
   echo "";
