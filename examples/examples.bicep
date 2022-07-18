@@ -179,7 +179,7 @@ module PEHttps '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: true
-    app_n: take('PE-Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('PE-Https-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
@@ -197,7 +197,7 @@ module VnetIntegrationPE '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('VnetIntegrationPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('VnetIntegration-PE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -316,9 +316,6 @@ module AppiWindowsVnet '../main.bicep' = {
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
-    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
-    pdnsz_app_id: pdnsz.id
-    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
     appi_k: appi.properties.InstrumentationKey
   }
 }
