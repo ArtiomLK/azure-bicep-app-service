@@ -142,6 +142,9 @@ resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!emp
   properties: {
     APPINSIGHTS_INSTRUMENTATIONKEY: appi_k
   }
+  dependsOn: [
+    appServiceWebSettings
+  ]
 }
 
 resource appServiceLogSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
@@ -166,6 +169,10 @@ resource appServiceLogSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!emp
       enabled: true
     }
   }
+  dependsOn: [
+    appServiceWebSettings
+    appServiceAppSettings
+  ]
 }
 
 resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
