@@ -15,6 +15,10 @@ param app_n string
 @description('App Service Plan resource ID')
 param plan_id string
 
+@description('App Insights Instrumentation key')
+@secure()
+param appi_k string = ''
+
 @description('Enable only HTTPS traffic through App Service')
 param app_enable_https_only bool = false
 
@@ -54,9 +58,6 @@ var pdnsz_app_parsed_id = empty(pdnsz_app_id) ? {
 var app_properties = {
   serverFarmId: plan_id
   httpsOnly: app_enable_https_only
-  siteConfig: {
-    minTlsVersion: app_min_tls_v
-  }
  }
 
 var app_properties_w_vnet_integration = union(app_properties, {
@@ -71,6 +72,17 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
   location: location
   properties: empty(snet_plan_vnet_integration_id) ? app_properties : app_properties_w_vnet_integration
   tags: tags
+}
+
+resource appServiceWebSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'web'
+  properties: {
+    minTlsVersion: app_min_tls_v
+    detailedErrorLoggingEnabled : !empty(appi_k)
+    httpLoggingEnabled: !empty(appi_k)
+    requestTracingEnabled: !empty(appi_k)
+  }
 }
 
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = if (!empty(snet_app_vnet_pe_id)) {
@@ -119,6 +131,58 @@ module pdnszVnetLinkDeployment 'br:bicephubdev.azurecr.io/bicep/modules/networkp
     pdnsz_app_id: pdnsz_app_id
     tags: tags
   }
+}
+
+// ------------------------------------------------------------------------------------------------
+// Link App Insights
+// ------------------------------------------------------------------------------------------------
+resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'appsettings'
+  properties: {
+    APPINSIGHTS_INSTRUMENTATIONKEY: appi_k
+  }
+  dependsOn: [
+    appServiceWebSettings
+  ]
+}
+
+resource appServiceLogSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'logs'
+  properties: {
+    applicationLogs: {
+      fileSystem: {
+        level: 'Warning'
+      }
+    }
+    httpLogs: {
+      fileSystem: {
+        retentionInMb: 40
+        enabled: true
+      }
+    }
+    failedRequestsTracing: {
+      enabled: true
+    }
+    detailedErrorMessages: {
+      enabled: true
+    }
+  }
+  dependsOn: [
+    appServiceWebSettings
+    appServiceAppSettings
+  ]
+}
+
+resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = if(!empty(appi_k)) {
+  parent: appService
+  name: 'Microsoft.ApplicationInsights.AzureWebSites'
+  dependsOn: [
+    appServiceWebSettings
+    appServiceAppSettings
+    appServiceLogSettings
+  ]
 }
 
 output app object = appService

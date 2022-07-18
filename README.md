@@ -94,8 +94,18 @@ az deployment group create \
    tcpping http://contoso.com
    tcpping https://contoso.com
    tcpping contoso.com
-   tcpping <yourapp>.azurewebsites.net
+   tcpping <app_name>.azurewebsites.net
    ```
+
+```bash
+# Generate https calls for appi review
+for i in {0..10}
+do
+  echo "";
+  curl -X GET https://<app_name>.azurewebsites.net;
+  echo "";
+done
+```
 
 ## Logs
 

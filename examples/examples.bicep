@@ -27,6 +27,8 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   }
 }
 
+param log_n string = 'log-test'
+param appi_n string = 'appi-test'
 // ------------------------------------------------------------------------------------------------
 // REPLACE
 // '../main.bicep' by the ref with your version, for example:
@@ -127,26 +129,26 @@ resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 // ------------------------------------------------------------------------------------------------
 // App Service Vnet Integration
 // ------------------------------------------------------------------------------------------------
-module VnetIntegration '../main.bicep' = {
+module VnetIntegrationHttp '../main.bicep' = {
   name: 'VnetIntegration'
   params: {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('VnetIntegration-Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
   }
 }
 
-module ABVnetIntegration '../main.bicep' = {
-  name: 'ABCVnetIntegration'
+module VnetIntegrationHttps '../main.bicep' = {
+  name: 'VnetIntegrationHttps'
   params: {
     tags: tags
     location: location
-    app_enable_https_only: false
-    app_n: take('A-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_enable_https_only: true
+    app_n: take('VnetIntegration-Https-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -156,13 +158,13 @@ module ABVnetIntegration '../main.bicep' = {
 // ------------------------------------------------------------------------------------------------
 // App Service PE
 // ------------------------------------------------------------------------------------------------
-module VnetPE '../main.bicep' = {
-  name: 'VnetPE'
+module PEHttp '../main.bicep' = {
+  name: 'PE'
   params: {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('PE-Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
@@ -171,13 +173,13 @@ module VnetPE '../main.bicep' = {
   }
 }
 
-module ABVnetPE '../main.bicep' = {
-  name: 'ABVnetPE'
+module PEHttps '../main.bicep' = {
+  name: 'PEHttps'
   params: {
     tags: tags
     location: location
-    app_enable_https_only: false
-    app_n: take('A-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_enable_https_only: true
+    app_n: take('PE-Https-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
@@ -189,29 +191,13 @@ module ABVnetPE '../main.bicep' = {
 // ------------------------------------------------------------------------------------------------
 // App Service Vnet Integration & PE
 // ------------------------------------------------------------------------------------------------
-module VnetIntegrationVnetPE '../main.bicep' = {
-  name: 'VnetIntegrationVnetPE'
+module VnetIntegrationPE '../main.bicep' = {
+  name: 'VnetIntegrationPE'
   params: {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
-    plan_id: appServicePlan.id
-    app_min_tls_v: '1.2'
-    snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
-    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
-    pdnsz_app_id: pdnsz.id
-    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
-  }
-}
-
-module ABVnetIntegrationVnetPE '../main.bicep' = {
-  name: 'ABVnetIntegrationVnetPE'
-  params: {
-    tags: tags
-    location: location
-    app_enable_https_only: false
-    app_n: take('A-VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('VnetIntegration-PE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -246,7 +232,7 @@ module LinuxHttp '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('LinuxHttp-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Linux-Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.0'
   }
@@ -258,7 +244,7 @@ module LinuxHttpS '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: true
-    app_n: take('LinuxHttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Linux-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.1'
   }
@@ -273,5 +259,80 @@ module LinuxTLS12 '../main.bicep' = {
     app_n: take('Linux-TLS-12-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.2'
+  }
+}
+
+// ------------------------------------------------------------------------------------------------
+// Deploy Log Analytics Workspace
+// ------------------------------------------------------------------------------------------------
+
+module log '../modules/log/log.bicep' = {
+  name: log_n
+  params: {
+    location: location
+    name: log_n
+  }
+}
+
+// ------------------------------------------------------------------------------------------------
+// Deploy App Insight Service
+// ------------------------------------------------------------------------------------------------
+
+resource appi 'Microsoft.Insights/components@2020-02-02' = {
+  name: appi_n
+  location: location
+  kind: 'string'
+  tags: tags
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: log.outputs.id
+  }
+}
+
+// ------------------------------------------------------------------------------------------------
+// Test Appi Link
+// ------------------------------------------------------------------------------------------------
+
+module AppiWindows '../main.bicep' = {
+  name: 'AppiWindows'
+  params: {
+    tags: tags
+    location: location
+    app_enable_https_only: true
+    app_n: take('Appi-Windows-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.1'
+    appi_k: appi.properties.InstrumentationKey
+  }
+}
+
+module AppiWindowsVnet '../main.bicep' = {
+  name: 'AppiWindowsVnet'
+  params: {
+    tags: tags
+    location: location
+    app_enable_https_only: false
+    app_n: take('Appi-Windows-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+    snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
+    appi_k: appi.properties.InstrumentationKey
+  }
+}
+
+module AppiWindowsVnetPE '../main.bicep' = {
+  name: 'AppiWindowsVnetPE'
+  params: {
+    tags: tags
+    location: location
+    app_enable_https_only: false
+    app_n: take('Appi-Windows-VnetIntegration-PE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+    snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
+    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
+    pdnsz_app_id: pdnsz.id
+    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
+    appi_k: appi.properties.InstrumentationKey
   }
 }
