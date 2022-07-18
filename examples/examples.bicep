@@ -306,6 +306,23 @@ module AppiWindows '../main.bicep' = {
   }
 }
 
+module AppiWindowsVnet '../main.bicep' = {
+  name: 'AppiWindowsVnet'
+  params: {
+    tags: tags
+    location: location
+    app_enable_https_only: false
+    app_n: take('Appi-Windows-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    plan_id: appServicePlan.id
+    app_min_tls_v: '1.2'
+    snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
+    snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
+    pdnsz_app_id: pdnsz.id
+    app_pe_create_virtual_network_link: false // since this pdnsz to vnet Link already exists from previous module deployment we do not deploy it again
+    appi_k: appi.properties.InstrumentationKey
+  }
+}
+
 module AppiWindowsVnetPE '../main.bicep' = {
   name: 'AppiWindowsVnetPE'
   params: {
