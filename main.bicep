@@ -60,7 +60,7 @@ var app_properties = {
   httpsOnly: app_enable_https_only
  }
 
- var app_properties_w_vnet_integration = union(app_properties, {
+var app_properties_w_vnet_integration = union(app_properties, {
   virtualNetworkSubnetId: snet_plan_vnet_integration_id
 })
 
