@@ -81,7 +81,6 @@ resource appServiceWebSettings 'Microsoft.Web/sites/config@2020-06-01' = if(!emp
     minTlsVersion: app_min_tls_v
     detailedErrorLoggingEnabled : !empty(appi_k)
     httpLoggingEnabled: !empty(appi_k)
-    remoteDebuggingEnabled: !empty(appi_k)
     requestTracingEnabled: !empty(appi_k)
   }
 }
