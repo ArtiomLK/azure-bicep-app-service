@@ -129,26 +129,26 @@ resource pdnsz 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 // ------------------------------------------------------------------------------------------------
 // App Service Vnet Integration
 // ------------------------------------------------------------------------------------------------
-module VnetIntegration '../main.bicep' = {
+module VnetIntegrationHttp '../main.bicep' = {
   name: 'VnetIntegration'
   params: {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('VnetIntegration-Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
   }
 }
 
-module ABVnetIntegration '../main.bicep' = {
-  name: 'ABCVnetIntegration'
+module VnetIntegrationHttps '../main.bicep' = {
+  name: 'VnetIntegrationHttps'
   params: {
     tags: tags
     location: location
-    app_enable_https_only: false
-    app_n: take('A-VnetIntegration-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_enable_https_only: true
+    app_n: take('VnetIntegration-Https-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -158,13 +158,13 @@ module ABVnetIntegration '../main.bicep' = {
 // ------------------------------------------------------------------------------------------------
 // App Service PE
 // ------------------------------------------------------------------------------------------------
-module VnetPE '../main.bicep' = {
-  name: 'VnetPE'
+module PEHttp '../main.bicep' = {
+  name: 'PE'
   params: {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('PE-Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
@@ -173,13 +173,13 @@ module VnetPE '../main.bicep' = {
   }
 }
 
-module ABVnetPE '../main.bicep' = {
-  name: 'ABVnetPE'
+module PEHttps '../main.bicep' = {
+  name: 'PEHttps'
   params: {
     tags: tags
     location: location
-    app_enable_https_only: false
-    app_n: take('A-VnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_enable_https_only: true
+    app_n: take('PE-Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.0'
     snet_app_vnet_pe_id: vnetApp.properties.subnets[1].id
@@ -191,13 +191,13 @@ module ABVnetPE '../main.bicep' = {
 // ------------------------------------------------------------------------------------------------
 // App Service Vnet Integration & PE
 // ------------------------------------------------------------------------------------------------
-module VnetIntegrationVnetPE '../main.bicep' = {
-  name: 'VnetIntegrationVnetPE'
+module VnetIntegrationPE '../main.bicep' = {
+  name: 'VnetIntegrationPE'
   params: {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('VnetIntegrationVnetPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('VnetIntegrationPE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
@@ -232,7 +232,7 @@ module LinuxHttp '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('LinuxHttp-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Linux-Http-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.0'
   }
@@ -244,7 +244,7 @@ module LinuxHttpS '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: true
-    app_n: take('LinuxHttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Linux-HttpS-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: LinuxAppServicePlan.id
     app_min_tls_v: '1.1'
   }
@@ -312,7 +312,7 @@ module AppiWindowsVnetPE '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('Appi-Windows-VnetPE${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Appi-Windows-VnetIntegrationPE${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
