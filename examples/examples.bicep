@@ -312,7 +312,7 @@ module AppiWindowsVnetPE '../main.bicep' = {
     tags: tags
     location: location
     app_enable_https_only: false
-    app_n: take('Appi-Windows-VnetIntegrationPE${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
+    app_n: take('Appi-Windows-VnetIntegration-PE-${guid(subscription().id, resourceGroup().id, tags.env)}', 60)
     plan_id: appServicePlan.id
     app_min_tls_v: '1.2'
     snet_plan_vnet_integration_id: vnetApp.properties.subnets[0].id
